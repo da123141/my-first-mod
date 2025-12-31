@@ -1,24 +1,18 @@
-package com.hackerini;
+package me.hackerini;
 
-import net.fabricmc.api.ClientModInitializer;
+import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
-import org.lwjgl.glfw.GLFW;
+import me.hackerini.modules.Killaura;
 
-public class HackeriniClient implements ClientModInitializer {
-    public static boolean espEnabled = false;
+public class HackeriniMod implements ModInitializer {
+    public static final Killaura killaura = new Killaura();
 
     @Override
-    public void onInitializeClient() {
-        // Obsługa klawisza (np. "P" włącza/wyłącza ESP)
+    public void onInitialize() {
+        // Rejestrujemy tick, aby Killaura działała co klatkę
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
-            while (client.options.chatKey.wasPressed()) { // Przykład
-                // Logika otwierania menu
-            }
-            
-            // Prosty przełącznik pod klawiszem P (GLFW_KEY_P)
-            if (GLFW.glfwGetKey(client.getWindow().getHandle(), GLFW.GLFW_KEY_P) == GLFW.GLFW_PRESS) {
-                // Tu można dodać debouncing, żeby nie migało
-                espEnabled = !espEnabled;
+            if (client.player != null) {
+                killaura.onTick(client);
             }
         });
     }
