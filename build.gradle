@@ -1,40 +1,44 @@
 plugins {
-    id 'fabric-loom' version '1.7-SNAPSHOT'
-    id 'maven-publish'
+	id 'fabric-loom' version '1.9-SNAPSHOT'
+	id 'maven-publish'
 }
 
 version = project.mod_version
 group = project.maven_group
 
 repositories {
-    // Repozytoria dla bibliotek
+	// Potrzebne dla niektórych bibliotek
+	maven { url = "https://maven.terraformersmc.com/" }
 }
 
 dependencies {
-    // To tutaj dzieje się magia:
-    minecraft "com.mojang:minecraft:${project.minecraft_version}"
-    mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
-    modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+	minecraft "com.mojang:minecraft:1.21.4"
+	mappings "net.fabricmc:yarn:1.21.4+build.1:v2"
+	modImplementation "net.fabricmc:fabric-loader:0.16.9"
 
-    // To jest potrzebne do ClientTickEvents (Killaura/ESP)
-    modImplementation "net.fabricmc.fabric-api:fabric-api:0.111.0+1.21.4"
+	// API Fabric (niezbędne do działania moda)
+	modImplementation "net.fabricmc.fabric-api:fabric-api:0.110.0+1.21.4"
 }
 
 processResources {
-    inputs.property "version", project.version
-    filteringCharset "UTF-8"
-
-    filesMatching("fabric.mod.json") {
-        expand "version": project.version
-    }
+	inputs.property "version", project.version
+	filesMatching("fabric.mod.json") {
+		expand "version": project.version
+	}
 }
 
 tasks.withType(JavaCompile).configureEach {
-    it.options.release = 21
+	it.options.release = 21
 }
 
 java {
-    withSourcesJar()
-    sourceCompatibility = JavaVersion.VERSION_21
-    targetCompatibility = JavaVersion.VERSION_21
+	withSourcesJar()
+	sourceCompatibility = JavaVersion.VERSION_21
+	targetCompatibility = JavaVersion.VERSION_21
+}
+
+jar {
+	from("LICENSE") {
+		rename { "${it}_${project.archivesBaseName}"}
+	}
 }
