@@ -1,19 +1,27 @@
-package me.hackerini;
+package me.hackerini.modules;
 
-import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
-import me.hackerini.modules.Killaura;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.Hand;
 
-public class HackeriniMod implements ModInitializer {
-    public static final Killaura killaura = new Killaura();
+public class KillAura {
+    public static boolean enabled = true;
+    private static final double RANGE = 4.0;
 
-    @Override
-    public void onInitialize() {
-        // Rejestrujemy tick, aby Killaura działała co klatkę
-        ClientTickEvents.END_CLIENT_TICK.register(client -> {
-            if (client.player != null) {
-                killaura.onTick(client);
+    public static void onTick() {
+        MinecraftClient client = MinecraftClient.getInstance();
+        if (!enabled || client.player == null || client.world == null) return;
+
+        for (Entity entity : client.world.getEntities()) {
+            if (entity instanceof PlayerEntity && entity != client.player) {
+                if (client.player.distanceTo(entity) <= RANGE) {
+                    // Atakowanie
+                    client.interactionManager.attackEntity(client.player, entity);
+                    client.player.swingHand(Hand.MAIN_HAND);
+                    break; 
+                }
             }
-        });
+        }
     }
 }
