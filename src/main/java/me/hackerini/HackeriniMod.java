@@ -1,10 +1,13 @@
 package me.hackerini;
 
-import net.fabricmc.api.ModInitializer;
+import net.fabricmc.api.ClientModInitializer;
 
-public class HackeriniMod implements ModInitializer {
+// Zmieniamy na ClientModInitializer, bo tak masz w fabric.mod.json
+public class HackeriniMod implements ClientModInitializer {
+
     @Override
-    public void onInitialize() {
-        // Tutaj możesz zostawić pusto
+    public void onInitializeClient() {
+        // Ta metoda wywoła się przy starcie Minecrafta
+        System.out.println("Hackerini Client załadowany pomyślnie!");
     }
 }
