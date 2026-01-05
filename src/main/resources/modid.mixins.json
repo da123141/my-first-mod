@@ -3,8 +3,9 @@
   "minVersion": "0.8",
   "package": "me.hackerini.mixin",
   "compatibilityLevel": "JAVA_21",
-  "mixins": [
-    "EntityMixin"
+"mixins": [
+    "EntityMixin",
+    "WorldRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1
